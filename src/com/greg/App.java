@@ -23,19 +23,71 @@ public class App extends JFrame {
     }
 
     private void initUI() {
-        JPopupMenu jPopupMenu = new JPopupMenu();
-
-        createMenuBar(jPopupMenu);
-
-
         setTitle(AppName);
         setSize(800, 400);
+        setLayout(new BorderLayout());
 
         //center the window on the screen
         setLocationRelativeTo(null);
 
         //closes the window when you press the Close button of the title bar
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        JPopupMenu jPopupMenu = new JPopupMenu();
+
+
+        createMenuBar(jPopupMenu);
+
+
+//
+//      JSplitPane jSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+
+        JPanel jPanel = new JPanel();
+        jPanel.setSize(getWidth()-300,getHeight());
+        jPanel.setBackground(Color.blue);
+
+        jPanel.setLayout(new GridBagLayout());
+
+//        jPanel.setVisible(true);
+//        this.add(jPanel);
+
+        JPanel controls = new JPanel();
+        controls.setSize(getWidth()-150, getHeight());
+        controls.setBackground(Color.RED);
+//        controls.setVisible(true);
+//        this.add(controls);
+
+        JSplitPane jSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,jPanel,controls);
+//        jSplitPane.setSize(getWidth(),getHeight());
+        jSplitPane.setDividerSize(10);
+        jSplitPane.setResizeWeight(0.90);
+
+//        jSplitPane.setDividerLocation(getWidth()-300);
+//        jSplitPane.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
+
+        JPanel topControls = new JPanel();
+//        topControls.setSize(10,10);
+        topControls.setBackground(Color.orange);
+//        topControls.setVisible(true);
+//        this.add(topControls);
+
+
+        JSplitPane topPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT,jSplitPane,topControls);
+//        topPanel.setSize(10,10);
+//        topPanel.setDividerSize(10);
+        topPanel.setDividerLocation(10-getHeight());
+        topPanel.setResizeWeight(0.03);
+//        topPanel.setOrientation(JSplitPane.VERTICAL_SPLIT);
+//        jSplitPane.setRightComponent(jPanel);
+//        jSplitPane.setLeftComponent(controls);
+
+//        this.add(jSplitPane);
+        topPanel.setTopComponent(topControls);
+        topPanel.setBottomComponent(jSplitPane);
+        this.add(topPanel);
+//        this.add(jSplitPane);
+
+
 
     }
 
