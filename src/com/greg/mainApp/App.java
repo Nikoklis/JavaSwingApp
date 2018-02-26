@@ -1,7 +1,8 @@
-package com.greg;
+package com.greg.mainApp;
+
+import com.greg.airports.Airport;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -41,26 +42,28 @@ public class App extends JFrame {
         createMenuBar(jPopupMenu);
 
 
-        //the mid-left panel used for the main simulation
-        JPanel leftPanel = new JPanel();
-        leftPanel.setSize(960, 480);
-//        leftPanel.setBackground(Color.blue);
-
-        //initialize the Map from mapFile
-        initMap(leftPanel);
-
-
         //the mid-right panel used for the output
         //of informative states to the user
         JPanel rightPanel = new JPanel();
-        rightPanel.setSize(getWidth() - 150, getHeight());
-        rightPanel.setBackground(Color.RED);
+        rightPanel.setSize(1200 - 960, 600 - 480);
+        JTextArea jTextArea = new JTextArea();
+        jTextArea.setEditable(false);
+        jTextArea.setPreferredSize(new Dimension(rightPanel.getWidth(),getHeight()));
+        jTextArea.setText("Initializing world...\nLoading world components...\nLoading airports...\n");
+
+        rightPanel.add(jTextArea);
+
+
+        //the mid-left panel used for the main simulation
+        JPanel leftPanel = new JPanel();
+        leftPanel.setSize(960, 480);
 
 
         //splitPane for the 2 middle panels
         JSplitPane centerPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, rightPanel);
-        centerPane.setDividerSize(10);
-        centerPane.setResizeWeight(0.90);
+        centerPane.setDividerSize(0);
+        centerPane.setDividerLocation(940);
+        centerPane.setResizeWeight(1);
 
         //the top panel containing info
         JPanel topPanel = new JPanel();
@@ -72,43 +75,49 @@ public class App extends JFrame {
         //new pane for all three panels
         //nested JspliPane to split the screen into 3 parts
         JSplitPane topPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, centerPane, topPanel);
-//        topPane.setDividerLocation(5 - getHeight());
         topPane.setResizeWeight(0.03);
 
         topPane.setTopComponent(topPanel);
         topPane.setBottomComponent(centerPane);
         this.add(topPane);
+
+        //initialize the Map from mapFile
+        initMap(leftPanel);
+
+        String temp = jTextArea.getText();
+        temp += "Initialization complete!";
+        jTextArea.setText(temp);
     }
 
     private void initMap(JPanel leftPanel) {
-        File file = new File("examples/world_default.txt");
-        BufferedReader bufferedReader = null;
+        File worldFile = new File("examples/world_default.txt");
+        File airportsFile = new File("examples/airports_default.txt");
+        BufferedReader bufferedReaderWorld = null;
+        BufferedReader bufferedReaderAirport = null;
         try {
-            bufferedReader = new BufferedReader(new FileReader(file));
+            bufferedReaderWorld = new BufferedReader(new FileReader(worldFile));
+            bufferedReaderAirport = new BufferedReader(new FileReader(airportsFile));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-//        Squares squares = new Squares(bufferedReader);
-//        GridBagConstraints gridBagConstraints = new GridBagConstraints();
-//        leftPanel.setLayout(new GridBagLayout());
-//        leftPanel.setLayout(new BoxLayout(leftPanel,BoxLayout.X_AXIS));
-        leftPanel.setLayout(new GridLayout(30,60));
+        ArrayList<JPanel> components = new ArrayList<JPanel>();
+        ArrayList<Airport> airports = new ArrayList<>();
+
+        initWorld(bufferedReaderWorld, components, leftPanel);
+        initAirports(bufferedReaderAirport, airports,components);
+
+    }
+
+
+    //helper functions called from the initMap
+    private void initWorld(BufferedReader bufferedReaderWorld, ArrayList<JPanel> components, JPanel leftPanel) {
+        leftPanel.setLayout(new GridLayout(30, 60));
         String line = "";
         String delimeter = ",";
-//        leftPanel.add(new Squares(0,0,1,1,"0"));
-//        leftPanel.add(new Squares(0,1,1,1,"110"));
-//        leftPanel.add(new Squares(0,2,1,1,"222"));
-//        leftPanel.add(new Squares(0,3,1,1,"222"));
-//        leftPanel.add(new Squares(1,2,1,1,"222"));
-//        leftPanel.add(new Squares( 0,0,13,13,"0",gridBagConstraints),gridBagConstraints);
-//        leftPanel.add(new Squares(122,122,16,16,"0",gridBagConstraints),gridBagConstraints);
-//        leftPanel.add(new Squares(2,1,16,16,"0",gridBagConstraints),gridBagConstraints);
-//        leftPanel.add(new Squares(2,2,1,1,"0",gridBagConstraints),gridBagConstraints);
-        ArrayList<JPanel> components = new ArrayList<JPanel>();
-        int countLines = 0;
+
         int[] rgbValues;
         try {
-            while ((line = bufferedReader.readLine()) != null) {
+            while ((line = bufferedReaderWorld.readLine()) != null) {
                 String[] height = line.split(delimeter);
                 for (int i = 0; i < 60; i++) {
 //                    Squares squares = new Squares(countLines,i,16,16,height[i]);
@@ -116,40 +125,98 @@ public class App extends JFrame {
 //                    add(squares);
                     JPanel temp = new JPanel();
                     rgbValues = checkColour(height[i]);
-                    temp.setBackground(new Color(rgbValues[0],rgbValues[1],rgbValues[2]));
-                    temp.setSize(16,16);
+                    temp.setBackground(new Color(rgbValues[0], rgbValues[1], rgbValues[2]));
+                    temp.setSize(16, 16);
                     components.add(temp);
                     leftPanel.add(temp);
                 }
-                countLines++;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-//        leftPanel.add(
-//                leftPanel.add(squares);
-
-//        leftPanel.setLayout(n);
-//        leftPanel = squares;
     }
-    public int[] checkColour(String colour) {
+
+    //helperfunctions called from the initMap
+    private void initAirports(BufferedReader bufferedReaderAirport, ArrayList<Airport> airports, ArrayList<JPanel> components) {
+        String line = null;
+        String delimeter = ",";
+
+        int type;
+        int id;
+        int orientation;
+        boolean state;
+        int[] coordinates = {0, 0};
+        int counter = 0;
+        try {
+            while ((line = bufferedReaderAirport.readLine()) != null) {
+                String[] info = line.split(delimeter);
+                id = Integer.parseInt(info[0]);
+                coordinates[0] = Integer.parseInt(info[1]);
+                coordinates[1] = Integer.parseInt(info[2]);
+                orientation = Integer.parseInt(info[4]);
+                type = Integer.parseInt(info[5]);
+                state = Boolean.parseBoolean(info[6]);
+                airports.add(new Airport(info[3], coordinates[0], coordinates[1], id, type, orientation, state));
+                System.out.println("First coordinate : " + coordinates[0] + " Second coordinate :" + coordinates[1]);
+
+                //we have a 1D matrix and we get 2 dimensions
+                //so we have to cast the 2 coordinates to our 1D matrix
+                JPanel box = components.get(coordinates[0] * 60 + coordinates[1]);
+                Color tempColor = box.getBackground();
+
+                Color oldColor = new Color(tempColor.getRed(), tempColor.getGreen(), tempColor.getBlue());
+
+                box.setLayout(new OverlayLayout(box));
+
+                JPanel image = new JPanel();
+                ImageIcon imageIcon = new ImageIcon("SimulationIcons/airport.png");
+                image.setBackground(oldColor);
+
+                image.add(new JLabel(imageIcon));
+
+
+                box.add(image);
+
+                counter++;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    private int[] checkColour(String colour) {
         int colourValue = Integer.parseInt(colour);
         int[] returnRGB = {0, 0, 0};
         if (colourValue == 0) {
-            returnRGB = new int[]{0, 0, 255};
+            returnRGB[0] = 0;
+            returnRGB[1] = 0;
+            returnRGB[2] = 255;
         } else if (colourValue <= 200 && colourValue > 0) {
-            returnRGB = new int[]{60, 179, 113};
+            returnRGB[0] = 60;
+            returnRGB[1] = 179;
+            returnRGB[2] = 113;
         } else if (colourValue <= 400 && colourValue > 200) {
-            returnRGB = new int[]{46, 139, 87};
+            returnRGB[0] = 46;
+            returnRGB[1] = 139;
+            returnRGB[2] = 87;
         } else if (colourValue <= 700 && colourValue > 400) {
-            returnRGB = new int[]{34, 139, 34};
+            returnRGB[0] = 34;
+            returnRGB[1] = 139;
+            returnRGB[2] = 34;
         } else if (colourValue <= 1500 && colourValue > 700) {
-            returnRGB = new int[]{222, 184, 135};
+            returnRGB[0] = 222;
+            returnRGB[1] = 184;
+            returnRGB[2] = 135;
         } else if (colourValue <= 3500 && colourValue > 1500) {
-            returnRGB = new int[]{205, 133, 63};
+            returnRGB[0] = 205;
+            returnRGB[1] = 133;
+            returnRGB[2] = 63;
         } else if (colourValue > 3500) {
-            returnRGB = new int[]{145, 80, 20};
+            returnRGB[0] = 145;
+            returnRGB[1] = 80;
+            returnRGB[2] = 20;
         }
 
         return returnRGB;
