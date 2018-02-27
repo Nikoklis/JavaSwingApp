@@ -1,21 +1,31 @@
 package com.greg.mainApp;
 
 import com.greg.airports.Airport;
+import com.sun.xml.internal.messaging.saaj.soap.JpegDataContentHandler;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.*;
 import java.util.ArrayList;
 
 public class App extends JFrame {
     private final String AppName = "MediaLab Flight Simulation";
+    private App app;
+
+    //files for airports,aircrafts,flights
+    private File airportFile;
+    private File worldFile;
+    private File flightFile;
+
+    //the mapid the user gives
+    //default -1
+    private int MAPID = -1;
 
 
     public App() {
+        app = this;
         initUI();
     }
 
@@ -37,18 +47,13 @@ public class App extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 
-        //creating the Menu
-        JPopupMenu jPopupMenu = new JPopupMenu();
-        createMenuBar(jPopupMenu);
-
-
         //the mid-right panel used for the output
         //of informative states to the user
         JPanel rightPanel = new JPanel();
         rightPanel.setSize(1200 - 960, 600 - 480);
         JTextArea jTextArea = new JTextArea();
         jTextArea.setEditable(false);
-        jTextArea.setPreferredSize(new Dimension(rightPanel.getWidth(),getHeight()));
+        jTextArea.setPreferredSize(new Dimension(rightPanel.getWidth(), getHeight()));
         jTextArea.setText("Initializing world...\nLoading world components...\nLoading airports...\n");
 
         rightPanel.add(jTextArea);
@@ -57,6 +62,9 @@ public class App extends JFrame {
         //the mid-left panel used for the main simulation
         JPanel leftPanel = new JPanel();
         leftPanel.setSize(960, 480);
+
+        //creating the Menu
+        createMenuBar(leftPanel);
 
 
         //splitPane for the 2 middle panels
@@ -90,13 +98,37 @@ public class App extends JFrame {
     }
 
     private void initMap(JPanel leftPanel) {
-        File worldFile = new File("examples/world_default.txt");
-        File airportsFile = new File("examples/airports_default.txt");
+        String worldFileName = "world_";
+        String airportFileName = "airports_";
+        if (MAPID == -1) {
+            worldFileName = "world_default.txt";
+            airportFileName = "airports_default.txt";
+        } else {
+            worldFileName += MAPID;
+            worldFileName += ".txt";
+
+            airportFileName += MAPID;
+            airportFileName += ".txt";
+        }
+
+        worldFile = new File(worldFileName);
+        airportFile = new File(airportFileName);
+        if (!worldFile.exists() || worldFile.isDirectory() ||
+                !airportFile.exists() || airportFile.isDirectory()) {
+            JOptionPane.showMessageDialog(null, "Error finding files with the given MAPID", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            loadInfo(leftPanel);
+        }
+
+
+    }
+
+    private void loadInfo(JPanel leftPanel) {
         BufferedReader bufferedReaderWorld = null;
         BufferedReader bufferedReaderAirport = null;
         try {
             bufferedReaderWorld = new BufferedReader(new FileReader(worldFile));
-            bufferedReaderAirport = new BufferedReader(new FileReader(airportsFile));
+            bufferedReaderAirport = new BufferedReader(new FileReader(airportFile));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -104,8 +136,7 @@ public class App extends JFrame {
         ArrayList<Airport> airports = new ArrayList<>();
 
         initWorld(bufferedReaderWorld, components, leftPanel);
-        initAirports(bufferedReaderAirport, airports,components);
-
+        initAirports(bufferedReaderAirport, airports, components);
     }
 
 
@@ -146,7 +177,6 @@ public class App extends JFrame {
         int orientation;
         boolean state;
         int[] coordinates = {0, 0};
-        int counter = 0;
         try {
             while ((line = bufferedReaderAirport.readLine()) != null) {
                 String[] info = line.split(delimeter);
@@ -157,7 +187,6 @@ public class App extends JFrame {
                 type = Integer.parseInt(info[5]);
                 state = Boolean.parseBoolean(info[6]);
                 airports.add(new Airport(info[3], coordinates[0], coordinates[1], id, type, orientation, state));
-                System.out.println("First coordinate : " + coordinates[0] + " Second coordinate :" + coordinates[1]);
 
                 //we have a 1D matrix and we get 2 dimensions
                 //so we have to cast the 2 coordinates to our 1D matrix
@@ -177,13 +206,11 @@ public class App extends JFrame {
 
                 box.add(image);
 
-                counter++;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 
 
     private int[] checkColour(String colour) {
@@ -247,21 +274,21 @@ public class App extends JFrame {
         return jTextField;
     }
 
-    private void createMenuBar(JPopupMenu jPopupMenu) {
+    private void createMenuBar(JPanel leftPanel) {
         JMenuBar menuBar = new JMenuBar();
 
         JMenu game = new JMenu("Game");
         JMenu simulation = new JMenu("Simulation");
 
 
-        createMenuItem(game, "Start", null);
-        createMenuItem(game, "Stop", null);
-        createMenuItem(game, "Load", null);
-        createMenuItem(game, "Exit", null);
+        createMenuItem(game, "Start", leftPanel);
+        createMenuItem(game, "Stop", leftPanel);
+        createMenuItem(game, "Load", leftPanel);
+        createMenuItem(game, "Exit", leftPanel);
 
-        createMenuItem(simulation, "Airports", jPopupMenu);
-        createMenuItem(simulation, "Aircrafts", null);
-        createMenuItem(simulation, "Flights", null);
+        createMenuItem(simulation, "Airports", leftPanel);
+        createMenuItem(simulation, "Aircrafts", leftPanel);
+        createMenuItem(simulation, "Flights", leftPanel);
 
 
         menuBar.add(game);
@@ -271,55 +298,41 @@ public class App extends JFrame {
         setJMenuBar(menuBar);
     }
 
-    private void createMenuItem(JMenu jMenu, String infoText, JPopupMenu jPopupMenu) {
+    private void createMenuItem(JMenu jMenu, String infoText, JPanel leftPanel) {
         JMenuItem menuItem = new JMenuItem(infoText);
-//        menuItem.setMnemonic(KeyEvent.VK_E);
-//        menuItem.setToolTipText("Exit application");
-//        menuItem.addActionListener((ActionEvent event) -> {
-//            System.exit(0);
-//        });
-        if (infoText.equals("Airports")) {
+
+        if (infoText.equals("Load")) {
+            menuItem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    String mapID = JOptionPane.showInputDialog(app,
+                            "Please provide with your MapID", null);
+                    MAPID = Integer.parseInt(mapID);
+
+                    initMap(leftPanel);
+                }
+            });
+        } else if (infoText.equals("Airports")) {
+            menuItem.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                }
+            });
+        } else if (infoText.equals("Aircrafts")) {
             menuItem.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
 
                 }
             });
-            menuItem.addMouseListener(new MouseAdapter() {
+        } else if (infoText.equals("Flights")) {
+            menuItem.addActionListener(new ActionListener() {
                 @Override
-                public void mousePressed(MouseEvent mouseEvent) {
-                    if (mouseEvent.isPopupTrigger()) {
-                        jPopupMenu.show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
-                    }
-                }
-
-                @Override
-                public void mouseReleased(MouseEvent mouseEvent) {
-                    if (mouseEvent.isPopupTrigger()) {
-                        jPopupMenu.show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
-                    }
+                public void actionPerformed(ActionEvent actionEvent) {
                 }
             });
-            jPopupMenu.add(menuItem);
-
-        }// else if (infoText.equals("Aircrafts")) {
-//            menuItem.addMouseListener((ActionEvent event) -> {
-//
-//            });
-//        } else if (infoText.equals("Flights")) {
-//            menuItem.addMouseListener((ActionEvent event) -> {
-//
-//            });
-//        }
+        }
         jMenu.add(menuItem);
     }
-
-    private void showPopUp(MouseEvent event) {
-        if (event.isPopupTrigger()) {
-
-        }
-    }
-
-
 }
 
