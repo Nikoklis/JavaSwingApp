@@ -2,13 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="87fd48ea-56ad-49d6-817c-a0dbe8f7f71f" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/examples/airports_default.txt" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/examples/flights_default.txt" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/examples/world_default.txt" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/Graphics/com/greg/mainApp/App$1.class" afterPath="$PROJECT_DIR$/out/production/Graphics/com/greg/mainApp/App$1.class" />
-      <change beforePath="$PROJECT_DIR$/out/production/Graphics/com/greg/mainApp/App$2.class" afterPath="$PROJECT_DIR$/out/production/Graphics/com/greg/mainApp/App$2.class" />
-      <change beforePath="$PROJECT_DIR$/out/production/Graphics/com/greg/mainApp/App.class" afterPath="$PROJECT_DIR$/out/production/Graphics/com/greg/mainApp/App.class" />
       <change beforePath="$PROJECT_DIR$/src/com/greg/mainApp/App.java" afterPath="$PROJECT_DIR$/src/com/greg/mainApp/App.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -24,11 +17,12 @@
       <file leaf-file-name="App.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/greg/mainApp/App.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="205">
-              <caret line="65" column="8" lean-forward="false" selection-start-line="65" selection-start-column="8" selection-end-line="65" selection-end-column="8" />
+            <state relative-caret-position="324">
+              <caret line="123" column="16" lean-forward="true" selection-start-line="123" selection-start-column="16" selection-end-line="123" selection-end-column="16" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#4167#4175#0" expanded="true" />
+                <element signature="e#701#709#0" expanded="true" />
+                <element signature="e#760#769#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -99,9 +93,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scratches" />
-      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -139,6 +130,9 @@
         </subPane>
       </pane>
       <pane id="Scope" />
+      <pane id="PackagesPane" />
+      <pane id="Scratches" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -311,7 +305,7 @@
     <frame x="-118" y="192" width="1920" height="1047" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32815966" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -327,7 +321,7 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -359,7 +353,28 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4167#4175#0" expanded="true" />
+            <element signature="e#701#709#0" expanded="true" />
+            <element signature="e#760#769#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/greg/airports/Airport.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="12" column="27" lean-forward="false" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/greg/mainApp/App.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#701#709#0" expanded="true" />
+            <element signature="e#760#769#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -378,7 +393,8 @@
           <caret line="94" column="25" lean-forward="true" selection-start-line="94" selection-start-column="25" selection-end-line="94" selection-end-column="25" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4167#4175#0" expanded="true" />
+            <element signature="e#701#709#0" expanded="true" />
+            <element signature="e#760#769#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -399,7 +415,8 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4167#4175#0" expanded="true" />
+            <element signature="e#701#709#0" expanded="true" />
+            <element signature="e#760#769#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -417,7 +434,8 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4167#4175#0" expanded="true" />
+            <element signature="e#701#709#0" expanded="true" />
+            <element signature="e#760#769#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -454,11 +472,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/greg/mainApp/App.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="205">
-          <caret line="65" column="8" lean-forward="false" selection-start-line="65" selection-start-column="8" selection-end-line="65" selection-end-column="8" />
+        <state relative-caret-position="324">
+          <caret line="123" column="16" lean-forward="true" selection-start-line="123" selection-start-column="16" selection-end-line="123" selection-end-column="16" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4167#4175#0" expanded="true" />
+            <element signature="e#701#709#0" expanded="true" />
+            <element signature="e#760#769#0" expanded="true" />
           </folding>
         </state>
       </provider>

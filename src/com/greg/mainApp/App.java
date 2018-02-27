@@ -23,6 +23,10 @@ public class App extends JFrame {
     //default -1
     private int MAPID = -1;
 
+    //components for the map
+    ArrayList<JPanel> components = new ArrayList<JPanel>();
+    ArrayList<Airport> airports = new ArrayList<Airport>();
+
 
     public App() {
         app = this;
@@ -33,6 +37,7 @@ public class App extends JFrame {
         EventQueue.invokeLater(() -> {
             App app = new App();
             app.setVisible(true);
+
         });
     }
 
@@ -120,7 +125,6 @@ public class App extends JFrame {
             loadInfo(leftPanel);
         }
 
-
     }
 
     private void loadInfo(JPanel leftPanel) {
@@ -132,8 +136,13 @@ public class App extends JFrame {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        ArrayList<JPanel> components = new ArrayList<JPanel>();
-        ArrayList<Airport> airports = new ArrayList<>();
+
+        for (JPanel jPanel : components)
+        {
+            leftPanel.remove(jPanel);
+        }
+        components.removeAll(components);
+        airports.removeAll(components);
 
         initWorld(bufferedReaderWorld, components, leftPanel);
         initAirports(bufferedReaderAirport, airports, components);
@@ -151,9 +160,6 @@ public class App extends JFrame {
             while ((line = bufferedReaderWorld.readLine()) != null) {
                 String[] height = line.split(delimeter);
                 for (int i = 0; i < 60; i++) {
-//                    Squares squares = new Squares(countLines,i,16,16,height[i]);
-//                    leftPanel.add(squares);
-//                    add(squares);
                     JPanel temp = new JPanel();
                     rgbValues = checkColour(height[i]);
                     temp.setBackground(new Color(rgbValues[0], rgbValues[1], rgbValues[2]));
@@ -310,6 +316,9 @@ public class App extends JFrame {
                     MAPID = Integer.parseInt(mapID);
 
                     initMap(leftPanel);
+                    revalidate();
+//                    repaint();
+
                 }
             });
         } else if (infoText.equals("Airports")) {
